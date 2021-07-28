@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  backend:
+    image: morishima/aspgo-backend
+    build:
+      context: ./go
+      dockerfile: Dockerfile
+    environment:
+      - GRPC_PORT=50051
+    ports:
+      - "50051:50051"
+  frontend:
+    image: morishima/aspgo-frontend
+    build:
+      context: ./asp-netcore
+      dockerfile: Dockerfile
+    environment:
+      - GRPCOPTIONS__SERVER=backend
+      - GRPCOPTIONS__PORT=50051
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80:80"
+    volumes:
+      - ~/.aspnet/https:/https:ro
